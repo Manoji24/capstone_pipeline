@@ -31,7 +31,7 @@ jobs:
 
       - name: Run unit tests with pytest
         run: |
-          pytest tests/main_test.py -v --tb=short --cov=src/capstone_pipeline --cov-report=xml
+          python -m pytest tests/main_test.py -v --tb=short --cov=src/capstone_pipeline --cov-report=xml
 
       - name: Upload coverage reports
         uses: codecov/codecov-action@v3
