@@ -11,11 +11,22 @@ import capstone_pipeline.main as main
 @pytest.fixture(scope="session")
 def get_spark() -> SparkSession:
     """Create and return a Spark session for testing."""
+    sparksess = None
     try:
         from databricks.connect import DatabricksSession
-        return DatabricksSession.builder.serverless(True).getOrCreate()
+        sparksess =  DatabricksSession.builder.serverless(True).getOrCreate()
     except ImportError:
-        return SparkSession.builder.appName("test").getOrCreate()
+        sparksess =  SparkSession.builder.appName("test").getOrCreate()
+    
+    if hasattr(sparksess, "server_version"):
+        version = sparksess.server_version
+    else:
+        version = "unknown"
+
+    return sparksess
+    
+    
+
 
 
 

@@ -48,6 +48,51 @@ Located under `src/`:
 2. Configure `log_path` and base paths in each notebook to point to your storage/mount points.
 3. For **streaming ingestion**, ensure checkpoint locations are accessible and durable.
 
+---
+
+## 🚀 CI/CD Pipeline
+
+This repository uses **GitHub Actions** to automate testing and deployment on every push to the `main` branch.
+
+### Workflow: `.github/workflows/cicd.yml`
+
+The CI/CD pipeline includes three main stages:
+
+1. **Test Stage**
+   - Runs on every push and pull request
+   - Installs Python dependencies
+   - Executes pytest suite (`tests/main_test.py`)
+   - Generates and uploads coverage reports to Codecov
+
+2. **Deploy to Dev**
+   - Runs only on pushes to `main` (after tests pass)
+   - Uses `databricks bundle deploy --target dev`
+   - Validates deployment configuration
+
+3. **Deploy to Prod**
+   - Runs only on pushes to `main` (after dev deployment succeeds)
+   - Uses `databricks bundle deploy --target prod`
+   - Validates production deployment
+
+### Required GitHub Secrets
+
+Add these secrets to your GitHub repository settings (Settings > Secrets and variables > Actions):
+
+- `DATABRICKS_HOST` — Your Databricks workspace URL (e.g., `https://your-instance.cloud.databricks.com`)
+- `DATABRICKS_TOKEN` — Personal access token for Databricks authentication
+
+### Triggering the Workflow
+
+- **Push to `main`**: Runs all stages (test → dev → prod)
+- **Pull Request to `main`**: Runs tests only (no deployment)
+
+### Monitoring Builds
+
+- View workflow runs: GitHub repo → **Actions** tab
+- Failed workflows block merges to `main`
+- Coverage reports available via Codecov integration
+
+---
 
 ## ▶️ Databricks CLI
 

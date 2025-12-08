@@ -78,6 +78,11 @@ CREATE VOLUME IF NOT EXISTS CAPSTONE.BRONZE.HISTORY
 
 -- COMMAND ----------
 
+CREATE VOLUME IF NOT EXISTS CAPSTONE.BRONZE.CHECKPOINT
+        COMMENT 'This is the volume for configuring checkponit data'
+
+-- COMMAND ----------
+
 LIST '/Volumes/capstone/bronze/rawtest' 
 
 -- COMMAND ----------
@@ -100,11 +105,13 @@ LIST '/Volumes/capstone/bronze/rawtest'
 -- MAGIC transactions_path = f"{base_raw_path}/transactions_raw"
 -- MAGIC customers_path = f"{base_raw_path}/customers_raw"
 -- MAGIC products_path = f"{base_raw_path}/products_raw"
+-- MAGIC checkpoint_path = f"/Volumes/CAPSTONE/bronze/checkpoint"
 -- MAGIC
 -- MAGIC create_directory_ifnotexists(base_raw_path)
 -- MAGIC create_directory_ifnotexists(transactions_path)
 -- MAGIC create_directory_ifnotexists(customers_path)
 -- MAGIC create_directory_ifnotexists(products_path)
+-- MAGIC create_directory_ifnotexists(checkpoint_path)
 
 -- COMMAND ----------
 
