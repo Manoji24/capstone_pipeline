@@ -3,43 +3,62 @@ resources:
   jobs:
     capstone_pipeline_job:
       name: capstone_pipeline_job
-
+      email_notifications:
+        on_failure:
+          - mmanojipec@gmail.com
       trigger:
-        # Run this job every day, exactly one day from the last run; see https://docs.databricks.com/api/workspace/jobs/create#trigger
-        periodic:
-          interval: 1
-          unit: DAYS
-
-      #email_notifications:
-      #  on_failure:
-      #    - your_email@example.com
-
+        pause_status: UNPAUSED
+        file_arrival:
+          url: s3://capstone-proj-src/files/landing/
+          min_time_between_triggers_seconds: 60
       tasks:
-        - task_key: notebook_task
+        - task_key: Initial_Setup
           notebook_task:
-            notebook_path: ../src/notebook.ipynb
-
-        - task_key: refresh_pipeline
+            notebook_path: ../src/00_Initial_Setup.sql
+            base_parameters:
+              catalog: capstone
+            source: WORKSPACE
+        - task_key: 01_Bronze_Ingestion
           depends_on:
-            - task_key: notebook_task
-          pipeline_task:
-            pipeline_id: ${resources.pipelines.capstone_pipeline_pipeline.id}
-
-        - task_key: main_task
+            - task_key: Initial_Setup
+          notebook_task:
+            notebook_path: ../src/01_Bronze_Ingestion.ipynb
+            base_parameters:
+              catalog: capstone
+            source: WORKSPACE
+        - task_key: 02_Silver_Customers
           depends_on:
-            - task_key: refresh_pipeline
-          environment_key: default
-          python_wheel_task:
-            package_name: capstone_pipeline
-            entry_point: main
-
-      # A list of task execution environment specifications that can be referenced by tasks of this job.
-      environments:
-        - environment_key: default
-
-          # Full documentation of this spec can be found at:
-          # https://docs.databricks.com/api/workspace/jobs/create#environments-spec
-          spec:
-            client: "2"
-            dependencies:
-              - ../dist/*.whl
+            - task_key: 01_Bronze_Ingestion
+          notebook_task:
+            notebook_path: ../src/02_Silver_Customers_SCD2.ipynb
+            source: WORKSPACE
+        - task_key: 02_Silver_Products
+          depends_on:
+            - task_key: 01_Bronze_Ingestion
+          notebook_task:
+            notebook_path: ../src/02_Silver_Products.ipynb
+            source: WORKSPACE
+        - task_key: 02_Silver_Transactions
+          depends_on:
+            - task_key: 01_Bronze_Ingestion
+          notebook_task:
+            notebook_path: ../src/02_Silver_Transaction.ipynb
+            source: WORKSPACE
+        - task_key: 03_Gold_Sales_Fact_Table
+          depends_on:
+            - task_key: 02_Silver_Customers
+            - task_key: 02_Silver_Products
+            - task_key: 02_Silver_Transactions
+          notebook_task:
+            notebook_path: ../src/03_Gold_Fact_Table.ipynb
+            source: WORKSPACE
+        - task_key: 04_Gold_Fact_Table
+          depends_on:
+            - task_key: 03_Gold_Sales_Fact_Table
+          notebook_task:
+            notebook_path: ../src/04_Gold_Aggregations.ipynb
+            source: WORKSPACE
+      queue:
+        enabled: true
+      performance_target: PERFORMANCE_OPTIMIZED
+      max_concurrent_runs: 4
