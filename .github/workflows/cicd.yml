@@ -64,20 +64,15 @@ jobs:
           cache: 'pip'
 
       - name: Install Databricks CLI
-        run: |
-          python -m pip install --upgrade pip
-          pip install databricks-cli
-
-      - name: Configure Databricks CLI
-        env:
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
-        run: |
-          databricks auth login --host $DATABRICKS_HOST --token $DATABRICKS_TOKEN
+        uses: databricks/setup-cli@main
+        
 
       - name: Deploy to Dev
         run: |
           databricks bundle deploy --target dev
+        with:
+          databricks-host: ${{ secrets.DATABRICKS_HOST }}
+          databricks-token: ${{ secrets.DATABRICKS_TOKEN }}
 
       - name: Validate Dev Deployment
         run: |
@@ -101,20 +96,14 @@ jobs:
           cache: 'pip'
 
       - name: Install Databricks CLI
-        run: |
-          python -m pip install --upgrade pip
-          pip install databricks-cli
-
-      - name: Configure Databricks CLI
-        env:
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
-        run: |
-          databricks configure --host $DATABRICKS_HOST --token $DATABRICKS_TOKEN
+        uses: databricks/setup-cli@main
 
       - name: Deploy to Prod
         run: |
           databricks bundle deploy --target prod
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
 
       - name: Validate Prod Deployment
         run: |
