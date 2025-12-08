@@ -36,13 +36,6 @@ jobs:
           if [ -f pyproject.toml ]; then pip install -e .; fi
           pip install pytest pytest-cov pyspark databricks-cli
 
-      - name: Configure Databricks CLI
-        env:
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
-        run: |
-          databricks auth login --host $DATABRICKS_HOST --token $DATABRICKS_TOKEN
-
       - name: Run unit tests with pytest
         run: |
           python -m pytest tests/test_main.py -v --tb=short --cov=src/capstone_pipeline --cov-report=xml
