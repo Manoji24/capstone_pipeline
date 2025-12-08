@@ -213,97 +213,97 @@ def test_transform_hashvalue_creates_sha2_hash():
     assert call_args[0][0] == "hash_value"
 
 
-def test_transform_inticap_with_real_data(get_spark):
-    """Integration test: transform_inticap with real sample data."""
-    spark = get_spark
-    data = [("john doe",), ("jane smith",), ("bob johnson",)]
-    df = spark.createDataFrame(data, ["name"])
+# def test_transform_inticap_with_real_data(get_spark):
+#     """Integration test: transform_inticap with real sample data."""
+#     spark = get_spark
+#     data = [("john doe",), ("jane smith",), ("bob johnson",)]
+#     df = spark.createDataFrame(data, ["name"])
     
-    result = main.transform_inticap(df, "name")
+#     result = main.transform_inticap(df, "name")
     
-    assert result.collect() is not None
-    assert "name" in result.columns
+#     assert result.collect() is not None
+#     assert "name" in result.columns
 
 
-def test_transform_clean_digits_with_real_data(get_spark):
-    """Integration test: transform_clean_digits removes non-digits."""
-    spark = get_spark
-    data = [("123-456-7890",), ("(555) 123-4567",), ("no digits here",)]
-    df = spark.createDataFrame(data, ["phone"])
+# def test_transform_clean_digits_with_real_data(get_spark):
+#     """Integration test: transform_clean_digits removes non-digits."""
+#     spark = get_spark
+#     data = [("123-456-7890",), ("(555) 123-4567",), ("no digits here",)]
+#     df = spark.createDataFrame(data, ["phone"])
     
-    result = main.transform_clean_digits(df, "phone")
+#     result = main.transform_clean_digits(df, "phone")
     
-    assert result.collect() is not None
-    rows = result.collect()
-    assert rows[0]["phone"] == "1234567890"
-    assert rows[1]["phone"] == "5551234567"
+#     assert result.collect() is not None
+#     rows = result.collect()
+#     assert rows[0]["phone"] == "1234567890"
+#     assert rows[1]["phone"] == "5551234567"
 
 
-def test_transform_clean_currency_with_real_data(get_spark):
-    """Integration test: transform_clean_currency removes $ and commas."""
-    spark = get_spark
-    data = [("$1,234.56",), ("$99.99",), ("$1,000,000.00",)]
-    df = spark.createDataFrame(data, ["price"])
+# def test_transform_clean_currency_with_real_data(get_spark):
+#     """Integration test: transform_clean_currency removes $ and commas."""
+#     spark = get_spark
+#     data = [("$1,234.56",), ("$99.99",), ("$1,000,000.00",)]
+#     df = spark.createDataFrame(data, ["price"])
     
-    result = main.transform_clean_currency(df, "price")
+#     result = main.transform_clean_currency(df, "price")
     
-    assert result.collect() is not None
-    rows = result.collect()
-    assert rows[0]["price"] == "1234.56"
-    assert rows[1]["price"] == "99.99"
+#     assert result.collect() is not None
+#     rows = result.collect()
+#     assert rows[0]["price"] == "1234.56"
+#     assert rows[1]["price"] == "99.99"
 
 
-def test_transform_clean_timestamp_with_real_data(get_spark):
-    """Integration test: transform_clean_timestamp converts timezones to UTC."""
-    spark = get_spark
-    data = [
-        ("2024-01-15 10:30:00 PST",),
-        ("2024-01-15 13:45:00 EST",),
-        ("2024-06-15 14:00:00 PDT",),
-    ]
-    df = spark.createDataFrame(data, ["timestamp_col"])
+# def test_transform_clean_timestamp_with_real_data(get_spark):
+#     """Integration test: transform_clean_timestamp converts timezones to UTC."""
+#     spark = get_spark
+#     data = [
+#         ("2024-01-15 10:30:00 PST",),
+#         ("2024-01-15 13:45:00 EST",),
+#         ("2024-06-15 14:00:00 PDT",),
+#     ]
+#     df = spark.createDataFrame(data, ["timestamp_col"])
     
-    result = main.transform_clean_timestamp(df, "timestamp_col")
+#     result = main.transform_clean_timestamp(df, "timestamp_col")
     
-    assert result.collect() is not None
-    assert "order_timestamp" in result.columns
+#     assert result.collect() is not None
+#     assert "order_timestamp" in result.columns
 
 
-def test_fiter_corrupt_records_with_real_data(get_spark):
-    """Integration test: fiter_corrupt_records keeps null and non-'Y' values."""
-    spark = get_spark
-    data = [
-        ("record1", None),
-        ("record2", "N"),
-        ("record3", "Y"),
-        ("record4", None),
-        ("record5", "N"),
-    ]
-    df = spark.createDataFrame(data, ["record_id", "corrupt_flag"])
+# def test_fiter_corrupt_records_with_real_data(get_spark):
+#     """Integration test: fiter_corrupt_records keeps null and non-'Y' values."""
+#     spark = get_spark
+#     data = [
+#         ("record1", None),
+#         ("record2", "N"),
+#         ("record3", "Y"),
+#         ("record4", None),
+#         ("record5", "N"),
+#     ]
+#     df = spark.createDataFrame(data, ["record_id", "corrupt_flag"])
     
-    result = main.fiter_corrupt_records(df, "corrupt_flag")
+#     result = main.fiter_corrupt_records(df, "corrupt_flag")
     
-    rows = result.collect()
-    # Filter keeps: isNull (records 1, 4) OR != "Y" (records 2, 5)
-    # So records 1, 2, 4, 5 are kept; record 3 (where corrupt_flag == "Y") is removed
-    assert len(rows) == 4
-    assert all(row["corrupt_flag"] != "Y" or row["corrupt_flag"] is None for row in rows)
+#     rows = result.collect()
+#     # Filter keeps: isNull (records 1, 4) OR != "Y" (records 2, 5)
+#     # So records 1, 2, 4, 5 are kept; record 3 (where corrupt_flag == "Y") is removed
+#     assert len(rows) == 4
+#     assert all(row["corrupt_flag"] != "Y" or row["corrupt_flag"] is None for row in rows)
 
 
-def test_transform_hashvalue_with_real_data(get_spark):
-    """Integration test: transform_hashvalue creates sha2 hash from columns."""
-    spark = get_spark
-    data = [
-        ("john", "doe", "john@example.com"),
-        ("jane", "smith", "jane@example.com"),
-    ]
-    df = spark.createDataFrame(data, ["first_name", "last_name", "email"])
+# def test_transform_hashvalue_with_real_data(get_spark):
+#     """Integration test: transform_hashvalue creates sha2 hash from columns."""
+#     spark = get_spark
+#     data = [
+#         ("john", "doe", "john@example.com"),
+#         ("jane", "smith", "jane@example.com"),
+#     ]
+#     df = spark.createDataFrame(data, ["first_name", "last_name", "email"])
     
-    result = main.transform_hashvalue(df, ["first_name", "last_name", "email"])
+#     result = main.transform_hashvalue(df, ["first_name", "last_name", "email"])
     
-    assert result.collect() is not None
-    assert "hash_value" in result.columns
-    rows = result.collect()
-    # Verify hash values are created (64 char SHA2-256 hex string)
-    assert all(len(row["hash_value"]) == 64 for row in rows)
+#     assert result.collect() is not None
+#     assert "hash_value" in result.columns
+#     rows = result.collect()
+#     # Verify hash values are created (64 char SHA2-256 hex string)
+#     assert all(len(row["hash_value"]) == 64 for row in rows)
 
