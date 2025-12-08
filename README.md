@@ -33,12 +33,12 @@ This repository implements a **Databricks-based ETL pipeline** following the **M
 ## 📓 Notebooks
 Located under `src/`:
 
-- `01_Data_Ingestion_Bronze.ipynb` — Raw ingestion with Auto Loader → Bronze tables.
-- `02_Transaction_Transformation_Silver.ipynb` — Transaction cleaning → Silver transactions.
-- `02_Product_Transformation_Silver.ipynb` — Product metadata cleaning → Silver products.
-- `02_Customer_scd_Transformation.ipynb` — SCD2 merge logic → Silver customers.
-- `03_Data_Summarization_Gold.ipynb` — Dimension joins → Gold fact table.
-- `03_Data_Aggregation_Gold.ipynb` — Aggregations → Gold summary metrics.
+- `01_Bronze_Ingestion.ipynb` — Raw ingestion with Auto Loader → Bronze tables.
+- `02_Silver_Transaction.ipynb` — Transaction cleaning → Silver transactions.
+- `02_Silver_Products.ipynb` — Product metadata cleaning → Silver products.
+- `02_Silver_Customers_SCD2.ipynb` — SCD2 merge logic → Silver customers.
+- `03_Gold_Fact_Table.ipynb` — Dimension joins → Gold fact table.
+- `04_Gold_Aggregations.ipynb` — Aggregations → Gold summary metrics.
 - `tests/nb_pytest_demo.ipynb` — Run pytest suite inside cluster for quick verification.
 
 ---
