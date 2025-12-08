@@ -34,12 +34,8 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           if [ -f pyproject.toml ]; then pip install -e .; fi
-          pip install pytest pytest-cov pyspark
+          pip install pytest pytest-cov pyspark databricks-cli
 
-      - name: Install Databricks CLI test
-        run: |
-          python -m pip install --upgrade pip
-          pip install databricks-cli
       - name: Configure Databricks CLI
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
