@@ -4,7 +4,7 @@ version = "0.0.1"
 authors = [{ name = "mmanojipec@gmail.com" }]
 requires-python = ">= 3.11"
 dependencies = [
-    "databricks-connect>=16.1.7",
+    "pyspark==3.*",
     "pytest>=9.0.2",
     "pytest-cov>=7.0.0",
 ]
