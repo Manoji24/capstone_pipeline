@@ -3,6 +3,11 @@ name = "capstone_pipeline"
 version = "0.0.1"
 authors = [{ name = "mmanojipec@gmail.com" }]
 requires-python = ">= 3.11"
+dependencies = [
+    "databricks-connect>=16.1.7",
+    "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
+]
 
 [project.optional-dependencies]
 dev = [
