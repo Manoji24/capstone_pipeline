@@ -17,6 +17,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -28,7 +34,7 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           if [ -f pyproject.toml ]; then pip install -e .; fi
-          pip install pytest pytest-cov databricks-sdk
+          pip install pytest pytest-cov pyspark
 
       - name: Run unit tests with pytest
         run: |
