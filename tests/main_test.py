@@ -202,7 +202,6 @@ def test_transform_hashvalue_creates_sha2_hash():
     assert call_args[0][0] == "hash_value"
 
 
-# Integration tests using real Spark session with sample data
 def test_transform_inticap_with_real_data(get_spark):
     """Integration test: transform_inticap with real sample data."""
     spark = get_spark
