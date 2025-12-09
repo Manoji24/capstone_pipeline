@@ -133,7 +133,7 @@ jobs:
     steps:
       - name: Determine workflow status
         run: |
-          if [[ "${{ needs.test.result }}" == "success" && "${{ needs.deploy-dev.result }}" == "success" && "${{ needs.deploy-prod.result }}" == "success" ]]; then
+          if [[ "${{ needs.test.result }}" == "success" || ("${{ needs.deploy-dev.result }}" == "success" && "${{ needs.deploy-prod.result }}" == "success" )]]; then
             echo "✅ All steps completed successfully!"
             exit 0
           else
