@@ -103,7 +103,6 @@ CREATE EXTERNAL LOCATION IF NOT EXISTS EXT_S3_CAPSTONE URL 's3://capstone-proj-s
 -- MAGIC transactions_path = f"{base_raw_path}/transactions_raw"
 -- MAGIC customers_path = f"{base_raw_path}/customers_raw"
 -- MAGIC products_path = f"{base_raw_path}/products_raw"
--- MAGIC checkpoint_path = f"/Volumes/{dbutils.widgets.get("catalog")}/META/checkpoint"
 -- MAGIC
 -- MAGIC create_directory_ifnotexists(base_raw_path)
 -- MAGIC create_directory_ifnotexists(transactions_path)
