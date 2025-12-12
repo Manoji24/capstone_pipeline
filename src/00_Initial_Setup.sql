@@ -108,7 +108,7 @@ CREATE EXTERNAL LOCATION IF NOT EXISTS EXT_S3_CAPSTONE URL 's3://capstone-proj-s
 -- MAGIC create_directory_ifnotexists(transactions_path)
 -- MAGIC create_directory_ifnotexists(customers_path)
 -- MAGIC create_directory_ifnotexists(products_path)
--- MAGIC create_directory_ifnotexists(checkpoint_path)
+
 
 -- COMMAND ----------
 
