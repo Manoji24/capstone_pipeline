@@ -60,9 +60,6 @@ CREATE EXTERNAL LOCATION IF NOT EXISTS EXT_S3_CAPSTONE URL 's3://capstone-proj-s
 
 
 -- MAGIC %python
--- MAGIC spark.sql(f"""DROP EXTERNAL VOLUME IF EXISTS {dbutils.widgets.get('catalog')}.BRONZE.RAW LOCATION 's3://capstone-proj-src/'""")
-
--- MAGIC %python
 -- MAGIC spark.sql(f"""CREATE EXTERNAL VOLUME IF NOT EXISTS {dbutils.widgets.get('catalog')}.BRONZE.RAW
 -- MAGIC         COMMENT 'This is the external volume for source data'
 -- MAGIC         LOCATION 's3://capstone-proj-src/'""")
