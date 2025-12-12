@@ -22,7 +22,7 @@ SELECT CURRENT_CATALOG();
 
 -- COMMAND ----------
 
-CREATE SCHEMA IF NOT EXISTS IDENTIFIER(:catalog)._META;
+CREATE SCHEMA IF NOT EXISTS IDENTIFIER(:catalog).META;
 CREATE SCHEMA IF NOT EXISTS IDENTIFIER(:catalog).BRONZE;
 CREATE SCHEMA IF NOT EXISTS IDENTIFIER(:catalog).SILVER;
 CREATE SCHEMA IF NOT EXISTS IDENTIFIER(:catalog).GOLD;
@@ -70,12 +70,12 @@ LIST '/Volumes/capstone/bronze/raw'
 -- COMMAND ----------
 
 
-CREATE VOLUME IF NOT EXISTS IDENTIFIER(:catalog)._META.HISTORY
+CREATE VOLUME IF NOT EXISTS IDENTIFIER(:catalog).META.HISTORY
         COMMENT 'This is the volume for storing audit log data'
 
 -- COMMAND ----------
 
-CREATE VOLUME IF NOT EXISTS IDENTIFIER(:catalog)._META.CHECKPOINT
+CREATE VOLUME IF NOT EXISTS IDENTIFIER(:catalog).META.CHECKPOINT
         COMMENT 'This is the volume for configuring checkponit data'
 
 
@@ -100,7 +100,7 @@ CREATE VOLUME IF NOT EXISTS IDENTIFIER(:catalog)._META.CHECKPOINT
 -- MAGIC transactions_path = f"{base_raw_path}/transactions_raw"
 -- MAGIC customers_path = f"{base_raw_path}/customers_raw"
 -- MAGIC products_path = f"{base_raw_path}/products_raw"
--- MAGIC checkpoint_path = f"/Volumes/{dbutils.widgets.get("catalog")}/_meta/checkpoint"
+-- MAGIC checkpoint_path = f"/Volumes/{dbutils.widgets.get("catalog")}/META/checkpoint"
 -- MAGIC
 -- MAGIC create_directory_ifnotexists(base_raw_path)
 -- MAGIC create_directory_ifnotexists(transactions_path)
