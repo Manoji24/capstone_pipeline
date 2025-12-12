@@ -22,10 +22,11 @@ SELECT CURRENT_CATALOG();
 
 -- COMMAND ----------
 
-CREATE SCHEMA IF NOT EXISTS IDENTIFIER(:catalog).META;
-CREATE SCHEMA IF NOT EXISTS IDENTIFIER(:catalog).BRONZE;
-CREATE SCHEMA IF NOT EXISTS IDENTIFIER(:catalog).SILVER;
-CREATE SCHEMA IF NOT EXISTS IDENTIFIER(:catalog).GOLD;
+-- MAGIC %python
+-- MAGIC spark.sql(f"CREATE SCHEMA IF NOT EXISTS {dbutils.widgets.get("catalog")}.META")
+-- MAGIC spark.sql(f"CREATE SCHEMA IF NOT EXISTS {dbutils.widgets.get("catalog")}.BRONZE")
+-- MAGIC spark.sql(f"CREATE SCHEMA IF NOT EXISTS {dbutils.widgets.get("catalog")}.SILVER")
+-- MAGIC spark.sql(f"CREATE SCHEMA IF NOT EXISTS {dbutils.widgets.get("catalog")}.GOLD")
 
 -- COMMAND ----------
 
@@ -58,25 +59,27 @@ CREATE EXTERNAL LOCATION IF NOT EXISTS EXT_S3_CAPSTONE URL 's3://capstone-proj-s
 -- COMMAND ----------
 
 
-
-CREATE EXTERNAL VOLUME IF NOT EXISTS IDENTIFIER(:catalog).BRONZE.RAW
-        COMMENT 'This is the external volume for source data'
-        LOCATION 's3://capstone-proj-src/'
-
--- COMMAND ----------
-
-LIST '/Volumes/capstone/bronze/raw'
+-- MAGIC %python
+-- MAGIC spark.sql(f"""CREATE EXTERNAL VOLUME IF NOT EXISTS {dbutils.widgets.get('catalog')}.BRONZE.RAW
+-- MAGIC         COMMENT 'This is the external volume for source data'
+-- MAGIC         LOCATION 's3://capstone-proj-src/'""")
 
 -- COMMAND ----------
 
-
-CREATE VOLUME IF NOT EXISTS IDENTIFIER(:catalog).META.HISTORY
-        COMMENT 'This is the volume for storing audit log data'
+-- MAGIC %python
+-- MAGIC spark.sql(f"LIST '/Volumes/{dbutils.widgets.get('catalog')}/bronze/raw'")
 
 -- COMMAND ----------
 
-CREATE VOLUME IF NOT EXISTS IDENTIFIER(:catalog).META.CHECKPOINT
-        COMMENT 'This is the volume for configuring checkponit data'
+-- MAGIC %python
+-- MAGIC spark.sql(f"""CREATE VOLUME IF NOT EXISTS {dbutils.widgets.get('catalog')}.META.HISTORY
+-- MAGIC         COMMENT 'This is the volume for storing audit log data'""")
+
+-- COMMAND ----------
+
+-- MAGIC %python
+-- MAGIC spark.sql(f"""CREATE VOLUME IF NOT EXISTS {dbutils.widgets.get('catalog')}.META.CHECKPOINT
+-- MAGIC         COMMENT 'This is the volume for configuring checkponit data'""")
 
 
 
