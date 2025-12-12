@@ -22,9 +22,10 @@ SELECT CURRENT_CATALOG();
 
 -- COMMAND ----------
 
-CREATE SCHEMA IF NOT EXISTS CAPSTONE.BRONZE;
-CREATE SCHEMA IF NOT EXISTS CAPSTONE.SILVER;
-CREATE SCHEMA IF NOT EXISTS CAPSTONE.GOLD;
+CREATE SCHEMA IF NOT EXISTS IDENTIFIER(:catalog)._META;
+CREATE SCHEMA IF NOT EXISTS IDENTIFIER(:catalog).BRONZE;
+CREATE SCHEMA IF NOT EXISTS IDENTIFIER(:catalog).SILVER;
+CREATE SCHEMA IF NOT EXISTS IDENTIFIER(:catalog).GOLD;
 
 -- COMMAND ----------
 
@@ -58,7 +59,7 @@ CREATE EXTERNAL LOCATION IF NOT EXISTS EXT_S3_CAPSTONE URL 's3://capstone-proj-s
 
 
 
-CREATE EXTERNAL VOLUME IF NOT EXISTS CAPSTONE.BRONZE.RAW
+CREATE EXTERNAL VOLUME IF NOT EXISTS IDENTIFIER(:catalog).BRONZE.RAW
         COMMENT 'This is the external volume for source data'
         LOCATION 's3://capstone-proj-src/'
 
@@ -68,22 +69,16 @@ LIST '/Volumes/capstone/bronze/raw'
 
 -- COMMAND ----------
 
-CREATE VOLUME IF NOT EXISTS CAPSTONE.BRONZE.RAWTEST
-        COMMENT 'This is the external volume for source data'
 
--- COMMAND ----------
-
-CREATE VOLUME IF NOT EXISTS CAPSTONE.BRONZE.HISTORY
+CREATE VOLUME IF NOT EXISTS IDENTIFIER(:catalog)._META.HISTORY
         COMMENT 'This is the volume for storing audit log data'
 
 -- COMMAND ----------
 
-CREATE VOLUME IF NOT EXISTS CAPSTONE.BRONZE.CHECKPOINT
+CREATE VOLUME IF NOT EXISTS IDENTIFIER(:catalog)._META.CHECKPOINT
         COMMENT 'This is the volume for configuring checkponit data'
 
--- COMMAND ----------
 
-LIST '/Volumes/capstone/bronze/rawtest' 
 
 -- COMMAND ----------
 
@@ -101,11 +96,11 @@ LIST '/Volumes/capstone/bronze/rawtest'
 
 -- MAGIC %python
 -- MAGIC
--- MAGIC base_raw_path = "/Volumes/CAPSTONE/bronze/raw/files/landing"               # root landing zone
+-- MAGIC base_raw_path = f"/Volumes/{dbutils.widgets.get("catalog")}/bronze/raw/files/landing"               # root landing zone
 -- MAGIC transactions_path = f"{base_raw_path}/transactions_raw"
 -- MAGIC customers_path = f"{base_raw_path}/customers_raw"
 -- MAGIC products_path = f"{base_raw_path}/products_raw"
--- MAGIC checkpoint_path = f"/Volumes/CAPSTONE/bronze/checkpoint"
+-- MAGIC checkpoint_path = f"/Volumes/{dbutils.widgets.get("catalog")}/_meta/checkpoint"
 -- MAGIC
 -- MAGIC create_directory_ifnotexists(base_raw_path)
 -- MAGIC create_directory_ifnotexists(transactions_path)
@@ -115,8 +110,8 @@ LIST '/Volumes/capstone/bronze/rawtest'
 
 -- COMMAND ----------
 
--- MAGIC %sh
--- MAGIC ls -lrt /Volumes/CAPSTONE/bronze/raw/files/landing/*/
+-- MAGIC %python
+-- MAGIC dbutils.fs.ls(base_raw_path + "/*/")
 -- MAGIC
 
 -- COMMAND ----------
