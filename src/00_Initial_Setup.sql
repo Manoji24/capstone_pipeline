@@ -114,7 +114,7 @@ CREATE EXTERNAL LOCATION IF NOT EXISTS EXT_S3_CAPSTONE URL 's3://capstone-proj-s
 -- COMMAND ----------
 
 -- MAGIC %python
--- MAGIC dbutils.fs.ls(base_raw_path + "/*/")
+-- MAGIC dbutils.fs.ls(base_raw_path + "/")
 -- MAGIC
 
 -- COMMAND ----------
