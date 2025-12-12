@@ -15,16 +15,12 @@ resources:
         - task_key: Initial_Setup
           notebook_task:
             notebook_path: ../src/00_Initial_Setup.sql
-            base_parameters:
-              catalog: capstone
             source: WORKSPACE
         - task_key: 01_Bronze_Ingestion
           depends_on:
             - task_key: Initial_Setup
           notebook_task:
             notebook_path: ../src/01_Bronze_Ingestion.ipynb
-            base_parameters:
-              catalog: capstone
             source: WORKSPACE
         - task_key: 02_Silver_Customers
           depends_on:
@@ -60,5 +56,8 @@ resources:
             source: WORKSPACE
       queue:
         enabled: true
+      parameters:
+        - name: catalog
+          default: TestDemo
       performance_target: PERFORMANCE_OPTIMIZED
       max_concurrent_runs: 4
